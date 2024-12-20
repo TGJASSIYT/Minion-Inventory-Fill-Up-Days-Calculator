@@ -80,7 +80,8 @@
     <label for="diamondSpreading">Diamond Spreading:</label>
     <select id="diamondSpreading">
         <option value="no">No</option>
-        <option value="yes">Yes</option </select>
+        <option value="yes">Yes</option>
+    </select>
 
     <label for="production">Production in 1 Day:</label>
     <input type="number" id="production" placeholder="Enter production amount" required>
@@ -110,7 +111,7 @@
         }
 
         // Calculate total slots
-        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64); // Total items that can be stored
+        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64 ); // Total items that can be stored
         let effectiveProduction = production;
 
         // Adjust production based on fuel
