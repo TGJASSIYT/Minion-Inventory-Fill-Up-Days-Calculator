@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minion Inventory Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2f33; /* Dark background */
+            color: white; /* White text */
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        .container {
+            background: #23272a; /* Darker background for container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items */
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #40444b; /* Input background */
+            color: white; /* Input text color */
+        }
+        button {
+            background-color: #43b581; /* Green button */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #3ba55c; /* Darker green on hover */
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .error {
+            color: red; /* Error message color */
+        }
+        .success {
+            color: #43b581; /* Success message color */
+        }
+        .credits {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #b9bbbe; /* Lighter text for credits */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Minion Inventory Calculator</h1>
+    <label for="inventorySlots">Minion Inventory Slots:</label>
+    <input type="number" id="inventorySlots" placeholder="Enter number of slots" required>
+
+    <label for="backpackSlots">Backpack Slots (optional):</label>
+    <input type="number" id="backpackSlots" placeholder="Enter number of slots" min="0">
+
+    <label for="fuel">Fuel Percentage (0-100, optional):</label>
+    <input type="number" id="fuel" placeholder="Enter fuel percentage" min="0" max="100">
+
+    <label for="diamondSpreading">Diamond Spreading:</label>
+    <select id="diamondSpreading">
+        <option value="no">No</option>
+        <option value="yes">Yes</option </select>
+
+    <label for="production">Production in 1 Day:</label>
+    <input type="number" id="production" placeholder="Enter production amount" required>
+
+    <button onclick="calculateDays()">Calculate Days to Fill Inventory</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<div class="credits">
+    <p>Coder: TGJASSIYT (Discord Username: jassi_xc)</p>
+</div>
+
+<script>
+    function calculateDays() {
+        const inventorySlots = parseInt(document.getElementById('inventorySlots').value) || 0;
+        const backpackSlots = parseInt(document.getElementById('backpackSlots').value) || 0;
+        const fuelPercentage = parseInt(document.getElementById('fuel').value) || 0;
+        const diamondSpreading = document.getElementById('diamondSpreading').value;
+        const production = parseInt(document.getElementById('production').value) || 0;
+
+        // Check for required fields
+        if (inventorySlots <= 0 || production <= 0) {
+            document.getElementById('result').innerText = "Please fill the required fields correctly.";
+            document.getElementById('result').className = "result error";
+            return;
+        }
+
+        // Calculate total slots
+        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64); // Total items that can be stored
+        let effectiveProduction = production;
+
+        // Adjust production based on fuel
+        if (fuelPercentage > 0) {
+            effectiveProduction += (effectiveProduction * (fuelPercentage / 100));
+        }
+
+        // Adjust production based on diamond spreading
+        if (diamondSpreading === 'yes') {
+            effectiveProduction += (production * 0.1); // Increase production by 10%
+        }
+
+        // Calculate days to fill inventory
+        const daysToFill = totalSlots / effectiveProduction;
+
+        // Display result
+        document.getElementById('result').innerText = `Days to fill inventory: ${daysToFill.toFixed(2)}`;
+        document.getElementById('result').className = "result success";
+    }
+</script>
+
+</body>
+</html>
