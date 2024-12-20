@@ -17,7 +17,7 @@ A simple, web-based **Minion Inventory Calculator** designed for **CraftersMC Sk
 ---
 
 ## 🌐 Live Demo  
-[**Minion Inventory Calculator**](https://tgjassiyt.github.io/minion-fill-up-days-calc/)
+[**Minion Inventory Calculator**](https://tgjassiyt.github.io/Minion-Inventory-Fill-Up-Days-Calculator/)
 
 ---
 
