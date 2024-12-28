@@ -84,7 +84,7 @@
     </select>
 
     <label for="production">Production in 1 Day:</label>
-    <input type="number" id="production" placeholder="Enter production amount" required>
+    <input type="number" id="production" placeholder="Enter production amount" step="0.000001" required>
 
     <button onclick="calculateDays()">Calculate Days to Fill Inventory</button>
 
@@ -97,38 +97,57 @@
 
 <script>
     function calculateDays() {
-        const inventorySlots = parseInt(document.getElementById('inventorySlots').value) || 0;
-        const backpackSlots = parseInt(document.getElementById('backpackSlots').value) || 0;
-        const fuelPercentage = parseInt(document.getElementById('fuel').value) || 0;
+        const inventorySlots = parseFloat(document.getElementById('inventorySlots').value) || 0;
+        const backpackSlots = parseFloat(document.getElementById('backpackSlots').value) || 0;
+        const fuelPercentage = parseFloat(document.getElementById('fuel').value) || 0;
         const diamondSpreading = document.getElementById('diamondSpreading').value;
-        const production = parseInt(document.getElementById('production').value) || 0;
+        const production = parseFloat(document.getElementById('production').value) || 0;
 
-        // Check for required fields
-        if (inventorySlots <= 0 || production <= 0) {
+        // Validate inputs
+        if (inventorySlots <= 0 || production <= 0 || isNaN(production)) {
             document.getElementById('result').innerText = "Please fill the required fields correctly.";
             document.getElementById('result').className = "result error";
             return;
         }
 
         // Calculate total slots
-        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64 ); // Total items that can be stored
+        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64);
+
+        // Step 1: Base production
         let effectiveProduction = production;
 
-        // Adjust production based on fuel
+        // Step 2: Adjust for fuel
         if (fuelPercentage > 0) {
-            effectiveProduction += (effectiveProduction * (fuelPercentage / 100));
+            effectiveProduction += (production * (fuelPercentage / 100));
         }
 
-        // Adjust production based on diamond spreading
+        // Step 3: Adjust for diamond spreading
         if (diamondSpreading === 'yes') {
-            effectiveProduction += (production * 0.1); // Increase production by 10%
+            effectiveProduction += (effectiveProduction * 0.1);
         }
 
-        // Calculate days to fill inventory
+        // Step 4: Calculate days to fill inventory
         const daysToFill = totalSlots / effectiveProduction;
 
+        // Step 5: Break down into months/years if applicable
+        const averageMonth = 30.42; // Average days in a month
+        const averageYear = 365.04; // Average days in a year
+        let breakdown = "";
+
+        if (daysToFill >= averageYear) {
+            const years = Math.floor(daysToFill / averageYear);
+            breakdown += `${years} year${years > 1 ? "s" : ""} `;
+        }
+        if (daysToFill >= averageMonth) {
+            const months = Math.floor((daysToFill % averageYear) / averageMonth);
+            breakdown += `${months} month${months > 1 ? "s" : ""} `;
+        }
+
+        const days = (daysToFill % averageMonth).toFixed(2);
+        breakdown += `${days} day${days > 1 ? "s" : ""}`;
+
         // Display result
-        document.getElementById('result').innerText = `Days to fill inventory: ${daysToFill.toFixed(2)}`;
+        document.getElementById('result').innerHTML = `Days to fill inventory: ${daysToFill.toFixed(2)}<br>${breakdown}`;
         document.getElementById('result').className = "result success";
     }
 </script>
