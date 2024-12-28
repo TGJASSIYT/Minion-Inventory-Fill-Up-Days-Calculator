@@ -26,7 +26,7 @@
             flex-direction: column;
             align-items: center; /* Center items */
         }
-        input[type="number"], input[type="text"], select {
+        input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -83,6 +83,12 @@
         <option value="yes">Yes</option>
     </select>
 
+    <label for="blockConversion">Does your minion convert items to block form?</label>
+    <select id="blockConversion">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+    </select>
+
     <label for="production">Production in 1 Day:</label>
     <input type="number" id="production" placeholder="Enter production amount" step="0.000001" required>
 
@@ -101,6 +107,7 @@
         const backpackSlots = parseFloat(document.getElementById('backpackSlots').value) || 0;
         const fuelPercentage = parseFloat(document.getElementById('fuel').value) || 0;
         const diamondSpreading = document.getElementById('diamondSpreading').value;
+        const blockConversion = document.getElementById('blockConversion').value;
         const production = parseFloat(document.getElementById('production').value) || 0;
 
         // Validate inputs
@@ -116,20 +123,25 @@
         // Step 1: Base production
         let effectiveProduction = production;
 
-        // Step 2: Adjust for fuel
-        if (fuelPercentage > 0) {
-            effectiveProduction += (production * (fuelPercentage / 100));
+        // Step 2: Adjust for block conversion (if applicable)
+        if (blockConversion === 'yes') {
+            effectiveProduction /= 160; // Divide production by 160
         }
 
-        // Step 3: Adjust for diamond spreading
+        // Step 3: Adjust for fuel
+        if (fuelPercentage > 0) {
+            effectiveProduction += (effectiveProduction * (fuelPercentage / 100));
+        }
+
+        // Step 4: Adjust for diamond spreading
         if (diamondSpreading === 'yes') {
             effectiveProduction += (effectiveProduction * 0.1);
         }
 
-        // Step 4: Calculate days to fill inventory
+        // Step 5: Calculate days to fill inventory
         const daysToFill = totalSlots / effectiveProduction;
 
-        // Step 5: Break down into months/years if applicable
+        // Step 6: Break down into months/years if applicable
         const averageMonth = 30.42; // Average days in a month
         const averageYear = 365.04; // Average days in a year
         let breakdown = "";
