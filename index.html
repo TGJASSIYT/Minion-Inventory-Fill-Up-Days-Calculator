@@ -62,6 +62,11 @@
             font-size: 14px;
             color: #b9bbbe; /* Lighter text for credits */
         }
+        #note {
+            font-size: 12px;
+            color: #b9bbbe; /* Lighter text for note */
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -95,6 +100,7 @@
     <button onclick="calculateDays()">Calculate Days to Fill Inventory</button>
 
     <div class="result" id="result"></div>
+    <p id="note" style="display: none;">Note: The time shown above is in real-life days.</p>
 </div>
 
 <div class="credits">
@@ -110,10 +116,13 @@
         const blockConversion = document.getElementById('blockConversion').value;
         const production = parseFloat(document.getElementById('production').value) || 0;
 
+        const note = document.getElementById('note');
+
         // Validate inputs
         if (inventorySlots <= 0 || production <= 0 || isNaN(production)) {
             document.getElementById('result').innerText = "Please fill the required fields correctly.";
             document.getElementById('result').className = "result error";
+            note.style.display = "none"; // Hide the note
             return;
         }
 
@@ -161,6 +170,9 @@
         // Display result
         document.getElementById('result').innerHTML = `Days to fill inventory: ${daysToFill.toFixed(2)}<br>${breakdown}`;
         document.getElementById('result').className = "result success";
+
+        // Show the note about real-life time
+        note.style.display = "block";
     }
 </script>
 
