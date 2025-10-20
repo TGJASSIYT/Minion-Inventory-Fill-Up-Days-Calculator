@@ -90,99 +90,11 @@
 </div>
 
 <div class="container">
-    <h1>Minion Inventory Calculator</h1>
-    <label for="inventorySlots">Minion Inventory Slots:</label>
-    <input type="number" id="inventorySlots" placeholder="Enter number of slots" required>
-
-    <label for="backpackSlots">Backpack Slots (optional):</label>
-    <input type="number" id="backpackSlots" placeholder="Enter number of slots" min="0">
-
-    <label for="fuel">Fuel Percentage (0-100, optional):</label>
-    <input type="number" id="fuel" placeholder="Enter fuel percentage" min="0" max="100">
-
-    <label for="diamondSpreading">Diamond Spreading:</label>
-    <select id="diamondSpreading">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-    </select>
-
-    <label for="blockConversion">Does your minion convert items to block form?</label>
-    <select id="blockConversion">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-    </select>
-
-    <label for="production">Production in 1 Day:</label>
-    <input type="number" id="production" placeholder="Enter production amount" step="0.000001" required>
-
-    <button onclick="calculateDays()">Calculate Days to Fill Inventory</button>
-
-    <div class="result" id="result"></div>
-    <p id="note" style="display: none;">Note: The time shown above is in real-life days.</p>
+<p>This calculator has been shifted to CraftersMC Guides and now follows all their policies such as terms & conditions, privacy policy etc! <a href="https://craftersmc-guides.pages.dev/tools/minion-inv-time" target="_blank">Click here</a> to visit!</p>
 </div>
 
 <div class="credits">
     <p>Coder: TGJASSIYT (Discord Username: jassi_xc)</p>
 </div>
-
-<script>
-    function calculateDays() {
-        const inventorySlots = parseFloat(document.getElementById('inventorySlots').value) || 0;
-        const backpackSlots = parseFloat(document.getElementById('backpackSlots').value) || 0;
-        const fuelPercentage = parseFloat(document.getElementById('fuel').value) || 0;
-        const diamondSpreading = document.getElementById('diamondSpreading').value;
-        const blockConversion = document.getElementById('blockConversion').value;
-        const production = parseFloat(document.getElementById('production').value) || 0;
-
-        const note = document.getElementById('note');
-
-        if (inventorySlots <= 0 || production <= 0 || isNaN(production)) {
-            document.getElementById('result').innerText = "Please fill the required fields correctly.";
-            document.getElementById('result').className = "result error";
-            note.style.display = "none";
-            return;
-        }
-
-        const totalSlots = (inventorySlots * 64) + (backpackSlots * 64);
-
-        let effectiveProduction = production;
-
-        if (blockConversion === 'yes') {
-            effectiveProduction /= 160;
-        }
-
-        if (fuelPercentage > 0) {
-            effectiveProduction += (effectiveProduction * (fuelPercentage / 100));
-        }
-
-        if (diamondSpreading === 'yes') {
-            effectiveProduction += (effectiveProduction * 0.1);
-        }
-
-        const daysToFill = totalSlots / effectiveProduction;
-
-        const averageMonth = 30.42;
-        const averageYear = 365.04;
-        let breakdown = "";
-
-        if (daysToFill >= averageYear) {
-            const years = Math.floor(daysToFill / averageYear);
-            breakdown += `${years} year${years > 1 ? "s" : ""} `;
-        }
-        if (daysToFill >= averageMonth) {
-            const months = Math.floor((daysToFill % averageYear) / averageMonth);
-            breakdown += `${months} month${months > 1 ? "s" : ""} `;
-        }
-
-        const days = (daysToFill % averageMonth).toFixed(2);
-        breakdown += `${days} day${days > 1 ? "s" : ""}`;
-
-        document.getElementById('result').innerHTML = `Days to fill inventory: ${daysToFill.toFixed(2)}<br>${breakdown}`;
-        document.getElementById('result').className = "result success";
-
-        note.style.display = "block";
-    }
-</script>
-
 </body>
 </html>
